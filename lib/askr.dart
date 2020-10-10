@@ -64,7 +64,7 @@ part 'util/game_math.dart';
 part 'nodes/virtual_joystick.dart';
 
 /// 使用 [SpriteBox] 将精灵节点树渲染到屏幕的组件。
-class askr extends SingleChildRenderObjectWidget {
+class Askr extends SingleChildRenderObjectWidget {
   /// 精灵节点树的rootNode。
   /// ```dart
   /// var node = myaskr.rootNode;
@@ -85,7 +85,7 @@ class askr extends SingleChildRenderObjectWidget {
   /// var mySpriteTree = new MyCustomNodeWithSize();
   /// var myaskrWidget = new askr(mySpriteTree, SpriteBoxTransformMode.fixedHeight);
   /// ```
-  askr(this.rootNode, [this.transformMode = SpriteBoxTransformMode.letterbox]);
+  Askr(this.rootNode, [this.transformMode = SpriteBoxTransformMode.letterbox]);
 
   @override
   SpriteBox createRenderObject(BuildContext context) =>
