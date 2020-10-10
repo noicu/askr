@@ -1,12 +1,3 @@
-//  (
-//  )\ ) (
-// (()/( )\   )    )    (        (  (
-//  /(_)|(_| /(   (     )\  (    )\))( (
-// (_))_|_ )(_))  )\  '((_) )\ )((_))\ )\
-// | |_ | ((_)_ _((_))  (_)_(_/( (()(_|(_)
-// | __|| / _` | '  \() | | ' \)) _` / _ \
-// |_|  |_\__,_|_|_|_|  |_|_||_|\__, \___/
-//                              |___/
 // http://melonjs.github.io/melonJS/docs/me.Sprite.html
 library askr;
 
@@ -41,10 +32,9 @@ part 'motion/motion_delay.dart';
 part 'motion/motion_controller.dart';
 part 'motion/motion_call_function.dart';
 
-part 'supply/color_sequence.dart';
 part 'constraint/constraint.dart';
+
 part 'nodes/effect_line.dart';
-part 'supply/image_map.dart';
 part 'nodes/label.dart';
 part 'nodes/layer.dart';
 part 'nodes/nine_slice_sprite.dart';
@@ -55,13 +45,16 @@ part 'nodes/node_with_size.dart';
 part 'nodes/particle_system.dart';
 part 'nodes/sprite.dart';
 part 'nodes/frame_sprite.dart';
+part 'nodes/virtual_joystick.dart';
+part 'nodes/textured_line.dart';
+
+part 'supply/color_sequence.dart';
+part 'supply/image_map.dart';
 part 'supply/sprite_box.dart';
 part 'supply/spritesheet.dart';
 part 'supply/sprite_texture.dart';
-part 'nodes/textured_line.dart';
 part 'util/random.dart';
 part 'util/game_math.dart';
-part 'nodes/virtual_joystick.dart';
 
 /// 使用 [SpriteBox] 将精灵节点树渲染到屏幕的组件。
 class Askr extends SingleChildRenderObjectWidget {
