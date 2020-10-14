@@ -3,8 +3,11 @@ part of askr;
 /// [Label] 用于在节点树中显示文本,对齐文本可以设置 [TextStyle] 的textAlign属性
 class Label extends Node {
   /// 使用提供的 [text] 和 [textStyle] 创建一个新的Label
-  Label(this._text, {TextStyle textStyle, TextAlign textAlign})
-      : _textStyle = textStyle ?? const TextStyle(),
+  Label(
+    this._text, {
+    TextStyle textStyle,
+    TextAlign textAlign,
+  })  : _textStyle = textStyle ?? const TextStyle(),
         textAlign = textAlign ?? TextAlign.left;
 
   /// 绘制的文本

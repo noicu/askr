@@ -14,7 +14,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => MyHomePage(),
+        '/label': (context) => LabelPage(),
+      },
     );
   }
 }
@@ -38,12 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
             leading: Icon(Icons.map),
             title: Text('Label'),
             onTap: () {
-              Navigator.push(
-                context,
-                new MaterialPageRoute(
-                  builder: (context) => LabelPage(),
-                ),
-              );
+              Navigator.pushNamed(context, "/label");
             },
           ),
         ],

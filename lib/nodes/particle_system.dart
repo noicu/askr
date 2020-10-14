@@ -29,19 +29,14 @@ class _ParticleAccelerations {
   double tangentialAccel = 0.0;
 }
 
-/// A particle system uses a large number of sprites to draw complex effects
-/// such as explosions, smoke, rain, or fire. There are a number of properties
-/// that can be set to control the look of the particle system. Most of the
-/// properties have a base value and a variance, these values are used when
-/// creating each individual particle. For instance, by setting the [life] to
-/// 1.0 and the [lifeVar] to 0.5, each particle will get a life time in the
-/// range of 0.5 to 1.5.
-///
-/// Particles are created and added to the system at [emissionRate], but the
-/// number of particles can never exceed the [maxParticles] limit.
+/// 粒子系统使用大量的精灵绘制复杂的效果，例如爆炸，烟雾，雨水或火
+/// 可以设置许多属性来控制粒子系统的外观
+/// 大多数属性都有一个基本值和一个方差，在创建每个单独的粒子时会使用这些值
+/// 例如，通过将[life]设置为1.0并将[lifeVar]设置为0.5，每个粒子的寿命将在0.5到1.5之间
+/// 在[emissionRate]中创建了粒子并将其添加到系统中，但是粒子的数量绝不能超过[maxParticles]限制
 class ParticleSystem extends Node {
-  /// Creates a new particle system with the given properties. The only
-  /// required parameter is the texture, all other parameters are optional.
+  /// 创建具有给定属性的新粒子系统
+  /// 唯一需要的参数是纹理，所有其他参数都是可选的
   ParticleSystem(
     this.texture, {
     this.life: 1.5,
@@ -94,22 +89,22 @@ class ParticleSystem extends Node {
     }
   }
 
-  /// The texture used to draw each individual sprite.
+  /// 用于绘制每个单独的精灵的纹理
   SpriteTexture texture;
 
-  /// The time in seconds each particle will be alive.
+  /// 每个粒子存活的时间（以秒为单位)
   double life;
 
-  /// Variance of the [life] property.
+  /// [life] 属性的方差
   double lifeVar;
 
-  /// The variance of a particles initial position.
+  /// 粒子初始位置的方差
   Offset posVar;
 
-  /// The start scale of each individual particle.
+  /// 每个粒子的起始比例
   double startSize;
 
-  /// Variance of the [startSize] property.
+  /// [startSize]属性的方差
   double startSizeVar;
 
   /// The end scale of each individual particle.
