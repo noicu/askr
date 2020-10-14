@@ -104,58 +104,60 @@ class ParticleSystem extends Node {
   /// 每个粒子的起始比例
   double startSize;
 
-  /// [startSize]属性的方差
+  /// [startSize] 属性的方差
   double startSizeVar;
 
-  /// The end scale of each individual particle.
+  /// 每个粒子的最终比例
   double endSize;
 
-  /// Variance of the [endSize] property.
+  /// [endSize] 属性的方差
   double endSizeVar;
 
-  /// The start rotation of each individual particle.
+  /// 每个粒子的开始旋转
   double startRotation;
 
-  /// Variance of the [startRotation] property.
+  /// [startRotation] 属性的方差
   double startRotationVar;
 
-  /// The end rotation of each individual particle.
+  /// 每个粒子的结束旋转
   double endRotation;
 
-  /// Variance of the [endRotation] property.
+  /// [endRotation] 属性的方差
   double endRotationVar;
 
   /// If true, each particle will be rotated to the direction of the movement
   /// of the particle. The calculated rotation will be added to the current
   /// rotation as calculated by the [startRotation] and [endRotation]
   /// properties.
+  /// 如果为true，则每个粒子将旋转到运动方向粒子的
+  /// 计算出的旋转将添加到由 [startRotation] 和 [endRotation] 属性计算出的当前旋转中
   bool rotateToMovement;
 
-  /// The direction in which each particle will be emitted in degrees.
+  /// 每个粒子的发射方向，以度为单位
   double direction;
 
-  /// Variance of the [direction] property.
+  /// [direction] 属性的方差
   double directionVar;
 
-  /// The speed at which each particle will be emitted.
+  /// 每个粒子的发射速度
   double speed;
 
-  /// Variance of the [direction] property.
+  /// [direction] 属性的方差
   double speedVar;
 
-  /// The radial acceleration of each induvidual particle.
+  /// 每个粒子的径向加速度
   double radialAcceleration;
 
-  /// Variance of the [radialAcceleration] property.
+  /// [radialAcceleration] 属性的方差
   double radialAccelerationVar;
 
-  /// The tangential acceleration of each individual particle.
+  /// 每个粒子的切向加速度
   double tangentialAcceleration;
 
-  /// Variance of the [tangentialAcceleration] property.
+  /// [tangentialAcceleration] 属性的方差
   double tangentialAccelerationVar;
 
-  /// The gravity vector of the particle system.
+  /// 粒子系统的重力向量
   Offset get gravity {
     if (_gravity == null) return null;
 
