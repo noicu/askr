@@ -173,40 +173,42 @@ class ParticleSystem extends Node {
       _gravity = new Vector2(gravity.dx, gravity.dy);
   }
 
-  /// The maximum number of particles the system can display at a single time.
+  /// 系统一次可以显示的最大粒子数
   int maxParticles;
 
   /// Total number of particles to emit, if the value is set to 0 the system
   /// will continue to emit particles for an indifinte period of time.
+  /// 要发射的粒子总数，如果将该值设置为0，则系统将在不确定的时间内继续发射粒子
   int numParticlesToEmit;
 
-  /// The rate at which particles are emitted, defined in particles per second.
+  /// 粒子发射的速率，以每秒粒子数定义
   double emissionRate;
 
-  /// If set to true, the particle system will be automatically removed as soon
-  /// as there are no more particles left to draw.
+  /// 如果设置为true，则不再有要绘制的粒子时，将自动删除粒子系统
   bool autoRemoveOnFinish;
 
   /// The [ColorSequence] used to animate the color of each individual particle
   /// over the duration of its [life]. When applied to a particle the sequence's
   /// color stops modified in accordance with the [alphaVar], [redVar],
   /// [greenVar], and [blueVar] properties.
+  /// [ColorSequence] 用于在每个粒子的 [life] 内对其进行动画处理
+  /// 当应用于粒子时，序列的颜色将根据 [alphaVar]，[redVar]，[greenVar] 和 [blueVar] 属性停止修改
   ColorSequence colorSequence;
 
-  /// Alpha varience of the [colorSequence] property.
+  /// [colorSequence] 属性的Alpha方差
   int alphaVar;
 
-  /// Red varience of the [colorSequence] property.
+  /// [colorSequence] 属性的红色方差
   int redVar;
 
-  /// Green varience of the [colorSequence] property.
+  /// [colorSequence] 属性的绿色方差
   int greenVar;
 
-  /// Blue varience of the [colorSequence] property.
+  /// [colorSequence] 属性的蓝色方差
   int blueVar;
 
-  /// The transfer mode used to draw the particle system. Default is
-  /// [BlendMode.plus].
+  /// 用于绘制粒子系统的混合模式
+  /// 默认值为 [BlendMode.plus]
   BlendMode transferMode;
 
   List<_Particle> _particles;
@@ -214,13 +216,11 @@ class ParticleSystem extends Node {
   double _emitCounter;
   int _numEmittedParticles = 0;
 
-  /// The over all opacity of the particle system. This value is multiplied by
-  /// the opacity of the individual particles.
+  /// 粒子系统的整体不透明度
+  /// 该值乘以单个粒子的不透明度
   double opacity = 1.0;
 
-  /// Offset of where the particles are inserted, this is useful for doing
-  /// particle systems where the source of the particles move (e.g. smoke
-  /// trailing a rocket).
+  /// 粒子插入位置的偏移，这对于执行粒子源移动（例如，烟雾沿火箭飞行）的粒子系统很有用
   Offset insertionOffset;
 
   static Paint _paint = new Paint()
@@ -237,7 +237,7 @@ class ParticleSystem extends Node {
     // TODO: Fix this (it's a temp fix for low framerates)
     if (dt > 0.1) dt = 0.1;
 
-    // Create new particles
+    // 创建新粒子
     double rate = 1.0 / emissionRate;
 
     if (_particles.length < maxParticles) {
@@ -248,28 +248,28 @@ class ParticleSystem extends Node {
         _emitCounter > rate &&
         (numParticlesToEmit == 0 ||
             _numEmittedParticles < numParticlesToEmit)) {
-      // Add a new particle
+      // 添加一个新粒子
       _addParticle();
       _emitCounter -= rate;
     }
 
     // _elapsedTime += dt;
 
-    // Iterate over all particles
+    // 遍历所有粒子
     for (int i = _particles.length - 1; i >= 0; i--) {
       _Particle particle = _particles[i];
 
-      // Manage life time
+      // 管理生命时间
       particle.timeToLive -= dt;
       if (particle.timeToLive <= 0) {
         _particles.removeAt(i);
         continue;
       }
 
-      // Update the particle
+      // 更新粒子
 
       if (particle.accelerations != null) {
-        // Radial acceleration
+        // 径向加速度
         Vector2 radial;
         if (particle.pos[0] != 0 || particle.pos[1] != 0) {
           radial = new Vector2.copy(particle.pos)..normalize();
@@ -279,7 +279,7 @@ class ParticleSystem extends Node {
         Vector2 tangential = new Vector2.copy(radial);
         radial.scale(particle.accelerations.radialAccel);
 
-        // Tangential acceleration
+        // 切向加速度
         double newY = tangential.x;
         tangential.x = -tangential.y;
         tangential.y = newY;
@@ -294,17 +294,17 @@ class ParticleSystem extends Node {
         particle.dir += accel;
       }
 
-      // Update particle position
+      // 更新粒子位置
       particle.pos[0] += particle.dir[0] * dt;
       particle.pos[1] += particle.dir[1] * dt;
 
-      // Size
+      // 尺寸
       particle.size = math.max(particle.size + particle.deltaSize * dt, 0.0);
 
-      // Angle
+      // 角度
       particle.rotation += particle.deltaRotation * dt;
 
-      // Color
+      // 颜色
       if (particle.simpleColorSequence != null) {
         for (int i = 0; i < 4; i++) {
           particle.simpleColorSequence[i] +=
@@ -326,52 +326,52 @@ class ParticleSystem extends Node {
   void _addParticle() {
     _Particle particle = new _Particle();
 
-    // Time to live
+    // 生存时间
     particle.timeToLive = math.max(life + lifeVar * randomSignedDouble(), 0.0);
 
-    // Position
+    // 位置
     Offset srcPos = insertionOffset;
     particle.pos = new Vector2(srcPos.dx + posVar.dx * randomSignedDouble(),
         srcPos.dy + posVar.dy * randomSignedDouble());
 
-    // Size
+    // 尺寸
     particle.size =
         math.max(startSize + startSizeVar * randomSignedDouble(), 0.0);
     double endSizeFinal =
         math.max(endSize + endSizeVar * randomSignedDouble(), 0.0);
     particle.deltaSize = (endSizeFinal - particle.size) / particle.timeToLive;
 
-    // Rotation
+    // 旋转
     particle.rotation = startRotation + startRotationVar * randomSignedDouble();
     double endRotationFinal =
         endRotation + endRotationVar * randomSignedDouble();
     particle.deltaRotation =
         (endRotationFinal - particle.rotation) / particle.timeToLive;
 
-    // Direction
+    // 方向
     double dirRadians =
         convertDegrees2Radians(direction + directionVar * randomSignedDouble());
     Vector2 dirVector = new Vector2(math.cos(dirRadians), math.sin(dirRadians));
     double speedFinal = speed + speedVar * randomSignedDouble();
     particle.dir = dirVector..scale(speedFinal);
 
-    // Accelerations
+    // 加速度
     if (radialAcceleration != 0.0 ||
         radialAccelerationVar != 0.0 ||
         tangentialAcceleration != 0.0 ||
         tangentialAccelerationVar != 0.0) {
       particle.accelerations = new _ParticleAccelerations();
 
-      // Radial acceleration
+      // 径向加速度
       particle.accelerations.radialAccel =
           radialAcceleration + radialAccelerationVar * randomSignedDouble();
 
-      // Tangential acceleration
+      // 切向加速度
       particle.accelerations.tangentialAccel = tangentialAcceleration +
           tangentialAccelerationVar * randomSignedDouble();
     }
 
-    // Color
+    // 颜色
     particle.colorPos = 0.0;
     particle.deltaColorPos = 1.0 / particle.timeToLive;
 
@@ -380,7 +380,7 @@ class ParticleSystem extends Node {
           colorSequence, alphaVar, redVar, greenVar, blueVar);
     }
 
-    // Optimizes the case where there are only two colors in the sequence
+    // 优化序列中只有两种颜色的情况
     if (colorSequence.colors.length == 2) {
       Color startColor;
       Color endColor;
@@ -393,7 +393,7 @@ class ParticleSystem extends Node {
         endColor = colorSequence.colors[1];
       }
 
-      // First 4 elements are start ARGB, last 4 are delta ARGB
+      // 前4个元素是开始ARGB，后4个元素是增量ARGB
       particle.simpleColorSequence = new Float64List(8);
       particle.simpleColorSequence[0] = startColor.alpha.toDouble();
       particle.simpleColorSequence[1] = startColor.red.toDouble();
@@ -429,11 +429,11 @@ class ParticleSystem extends Node {
     _paint.blendMode = transferMode;
 
     for (_Particle particle in _particles) {
-      // Rect
+      // 矩形
       Rect rect = texture.frame;
       rects.add(rect);
 
-      // Transform
+      // 变换
       double scos;
       double ssin;
       if (rotateToMovement) {
@@ -460,7 +460,7 @@ class ParticleSystem extends Node {
       RSTransform transform = new RSTransform(scos, ssin, tx, ty);
       transforms.add(transform);
 
-      // Color
+      // 颜色
       if (particle.simpleColorSequence != null) {
         Color particleColor = new Color.fromARGB(
             (particle.simpleColorSequence[0] * opacity).toInt().clamp(0, 255),

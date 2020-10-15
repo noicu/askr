@@ -1,17 +1,15 @@
 part of askr;
 
-/// A [Node] that draws a polyline from a list of points using the provided
-/// [SpriteTexture]. The textured line draws static lines. If you want to create an
-/// animated line, consider using the [EffectLine] instead.
+/// 使用点列表绘制一条折线
+/// 如果要创建动画线，请考虑改用 [EffectLine]
 class TexturedLine extends Node {
-  /// Creates a new TexturedLine.
+  /// 创建一个新的 [TexturedLine]
   TexturedLine(List<Offset> points, List<Color> colors, List<double> widths,
       [SpriteTexture texture, List<double> textureStops]) {
     painter =
         new TexturedLinePainter(points, colors, widths, texture, textureStops);
   }
 
-  /// The painter used to draw the line.
   TexturedLinePainter painter;
 
   @override
@@ -20,15 +18,15 @@ class TexturedLine extends Node {
   }
 }
 
-/// Draws a polyline to a [Canvas] from a list of points using the provided [SpriteTexture].
+/// 使用提供的 [SpriteTexture] 从点列表中绘制一条多义线至 [Canvas]
 class TexturedLinePainter {
-  /// Creates a painter that draws a polyline with a texture.
+  /// 创建一个绘制带有纹理的折线的painter
   TexturedLinePainter(this._points, this.colors, this.widths,
       [SpriteTexture texture, this.textureStops]) {
     this.texture = texture;
   }
 
-  /// The points that makes up the polyline.
+  /// 组成折线的点
   List<Offset> get points => _points;
 
   List<Offset> _points;
@@ -38,14 +36,14 @@ class TexturedLinePainter {
     _calculatedTextureStops = null;
   }
 
-  /// The color of each point on the polyline. The color of the line will be
-  /// interpolated between the points.
+  /// 折线上每个点的颜色
+  /// 线的颜色将在两点之间插入
   List<Color> colors;
 
-  /// The width of the line at each point on the polyline.
+  /// 折线上每个点的线宽
   List<double> widths;
 
-  /// The texture this line will be drawn using.
+  /// 将使用此线条绘制纹理
   SpriteTexture get texture => _texture;
 
   SpriteTexture _texture;
@@ -63,10 +61,10 @@ class TexturedLinePainter {
     }
   }
 
-  /// Defines the position in the texture for each point on the polyline.
+  /// 为折线上的每个点定义纹理中的位置
   List<double> textureStops;
 
-  /// The [textureStops] used if no explicit texture stops has been provided.
+  /// 如果没有提供明显的纹理停止点，则使用 [textureStops]
   List<double> get calculatedTextureStops {
     if (_calculatedTextureStops == null) _calculateTextureStops();
     return _calculatedTextureStops;
@@ -76,17 +74,17 @@ class TexturedLinePainter {
 
   double _length;
 
-  /// The length of the line.
+  /// 线的长度
   double get length {
     if (_calculatedTextureStops == null) _calculateTextureStops();
     return _length;
   }
 
-  /// The offset of the texture on the line.
+  /// 线上纹理的偏移量
   double textureStopOffset = 0.0;
 
-  /// The length, in points, that the texture is stretched to. If the
-  /// textureLoopLength is shorter than the line, the texture will be looped.
+  /// 拉伸到的长度（以磅为单位）
+  /// 如果textureLoopLength短于该线，则纹理将循环
   double get textureLoopLength => textureLoopLength;
 
   double _textureLoopLength;
@@ -96,18 +94,17 @@ class TexturedLinePainter {
     _calculatedTextureStops = null;
   }
 
-  /// If true, the textured line attempts to remove artifacts at sharp corners
-  /// on the polyline.
+  /// 如果为true，则纹理线会尝试去除折线上尖角处的伪像
   bool removeArtifacts = true;
 
-  /// The [TransferMode] used to draw the line to the [Canvas].
+  /// 混合模式
   BlendMode transferMode = BlendMode.srcOver;
 
   Paint _cachedPaint = new Paint();
 
-  /// Paints the line to the [canvas].
+  /// 将线绘制到 [canvas]
   void paint(Canvas canvas) {
-    // Check input values
+    // 检查输入值
     assert(_points != null);
     if (_points.length < 2) return;
 
@@ -116,7 +113,6 @@ class TexturedLinePainter {
 
     _cachedPaint.blendMode = transferMode;
 
-    // Calculate normals
     List<Vector2> vectors = <Vector2>[];
     for (Offset pt in _points) {
       vectors.add(new Vector2(pt.dx, pt.dy));
@@ -131,11 +127,11 @@ class TexturedLinePainter {
     double textureBottom;
     List<double> stops;
 
-    // Add first point
+    // 添加第一点
     Offset lastPoint = _points[0];
     Vector2 lastMiter = miters[0];
 
-    // Add vertices and colors
+    // 添加顶点和颜色
     _addVerticesForPoint(vertices, lastPoint, lastMiter, widths[0]);
     verticeColors.add(colors[0]);
     verticeColors.add(colors[0]);
@@ -143,12 +139,12 @@ class TexturedLinePainter {
     if (texture != null) {
       assert(texture.rotated == false);
 
-      // Setup for calculating texture coordinates
+      // 用于计算纹理坐标的设置
       textureTop = texture.frame.top;
       textureBottom = texture.frame.bottom;
       textureCoordinates = <Offset>[];
 
-      // Use correct stops
+      // 使用正确的停止
       if (textureStops != null) {
         assert(_points.length == textureStops.length);
         stops = textureStops;
@@ -157,20 +153,20 @@ class TexturedLinePainter {
         stops = _calculatedTextureStops;
       }
 
-      // Texture coordinate points
+      // 纹理坐标点
       double xPos = _xPosForStop(stops[0]);
       textureCoordinates.add(new Offset(xPos, textureTop));
       textureCoordinates.add(new Offset(xPos, textureBottom));
     }
 
-    // Add the rest of the points
+    // 加上其余的点
     for (int i = 1; i < _points.length; i++) {
-      // Add vertices
+      // 添加顶点
       Offset currentPoint = _points[i];
       Vector2 currentMiter = miters[i];
       _addVerticesForPoint(vertices, currentPoint, currentMiter, widths[i]);
 
-      // Add references to the triangles
+      // 添加对三角形的引用
       int lastIndex0 = (i - 1) * 2;
       int lastIndex1 = (i - 1) * 2 + 1;
       int currentIndex0 = i * 2;
@@ -178,18 +174,18 @@ class TexturedLinePainter {
       indices.addAll(<int>[lastIndex0, lastIndex1, currentIndex0]);
       indices.addAll(<int>[lastIndex1, currentIndex1, currentIndex0]);
 
-      // Add colors
+      // 添加颜色
       verticeColors.add(colors[i]);
       verticeColors.add(colors[i]);
 
       if (texture != null) {
-        // Texture coordinate points
+        // 纹理坐标点
         double xPos = _xPosForStop(stops[i]);
         textureCoordinates.add(new Offset(xPos, textureTop));
         textureCoordinates.add(new Offset(xPos, textureBottom));
       }
 
-      // Update last values
+      // 更新最后的值
       lastPoint = currentPoint;
       lastMiter = currentMiter;
     }
@@ -250,10 +246,10 @@ class TexturedLinePainter {
     List<double> stops = <double>[];
     double length = 0.0;
 
-    // Add first stop
+    // 添加第一站
     stops.add(0.0);
 
-    // Calculate distance to each point from the first point along the line
+    // 计算沿线从第一个点到每个点的距离
     for (int i = 1; i < _points.length; i++) {
       Offset lastPoint = _points[i - 1];
       Offset currentPoint = _points[i];
@@ -263,7 +259,7 @@ class TexturedLinePainter {
       stops.add(length);
     }
 
-    // Normalize the values in the range [0.0, 1.0]
+    // 标准化 [0.0,1.0] 范围内的值
     for (int i = 1; i < points.length; i++) {
       stops[i] = stops[i] / length;
       new Offset(512.0, 512.0);

@@ -1,27 +1,29 @@
 part of askr;
 
-/// A Sprite is a [Node] that renders a bitmap image to the screen.
+/// Sprite是一个 [Node] ，可将位图渲染到屏幕上
 class Sprite extends NodeWithSize with SpritePaint {
-  /// The texture that the sprite will render to screen.
+  /// 要渲染到屏幕的纹理
   ///
-  /// If the texture is null, the sprite will be rendered as a red square
-  /// marking the bounds of the sprite.
-  ///
-  ///     mySprite.texture = myTexture;
+  /// 如果纹理为null，则精灵将呈现为红色正方形，标记精灵的边界
+  /// ```dart
+  /// mySprite.texture = myTexture;
+  /// ```
   SpriteTexture texture;
 
-  /// If true, constrains the proportions of the image by scaling it down, if its proportions doesn't match the [size].
-  ///
-  ///     mySprite.constrainProportions = true;
+  /// 如果为true，则如果图像的比例与 [size] 不匹配，则通过缩小图像来限制图像的比例
+  /// ```dart
+  /// mySprite.constrainProportions = true;
+  /// ```
   bool constrainProportions = false;
 
   Paint _cachedPaint = new Paint()
     ..filterQuality = FilterQuality.low
     ..isAntiAlias = false;
 
-  /// Creates a new sprite from the provided [texture].
-  ///
-  ///     var mySprite = new Sprite(myTexture)
+  /// 根据提供的 [texture] 创建一个新的精灵
+  /// ```dart
+  /// var mySprite = new Sprite(myTexture)
+  /// ```
   Sprite([this.texture]) : super(Size.zero) {
     if (texture != null) {
       size = texture.size;
@@ -31,9 +33,10 @@ class Sprite extends NodeWithSize with SpritePaint {
     }
   }
 
-  /// Creates a new sprite from the provided [image].
-  ///
+  /// 根据提供的 [image] 创建一个新的精灵
+  /// ```dart
   /// var mySprite = new Sprite.fromImage(myImage);
+  /// ```
   Sprite.fromImage(ui.Image image) : super(Size.zero) {
     assert(image != null);
 
@@ -45,7 +48,6 @@ class Sprite extends NodeWithSize with SpritePaint {
 
   @override
   void paint(Canvas canvas) {
-    // Account for pivot point
     applyTransformForPivot(canvas);
 
     if (texture != null) {
@@ -58,7 +60,7 @@ class Sprite extends NodeWithSize with SpritePaint {
       double scaleY = size.height / h;
 
       if (constrainProportions) {
-        // Constrain proportions, using the smallest scale and by centering the image
+        // 使用最小比例并通过居中图像来限制比例
         if (scaleX < scaleY) {
           canvas.translate(0.0, (size.height - scaleX * h) / 2.0);
           scaleY = scaleX;
@@ -70,34 +72,34 @@ class Sprite extends NodeWithSize with SpritePaint {
 
       canvas.scale(scaleX, scaleY);
 
-      // Setup paint object for opacity and transfer mode
+      // 设置绘画对象的不透明度和混合模式
       _updatePaint(_cachedPaint);
 
-      // Do actual drawing of the sprite
+      // 实际绘制精灵
       texture.drawTexture(canvas, Offset.zero, _cachedPaint);
 
-      // Debug drawing
+      // 调试
       if (debugPaintSizeEnabled) {
         canvas.drawRect(Offset.zero & texture.size,
             new Paint()..color = const Color(0x1700FFF2));
         debugDrawing(canvas, texture.size);
       }
     } else {
-      // Paint a red square for missing texture
+      // 画一个红色方块以弥补缺失的纹理
       canvas.drawRect(new Rect.fromLTRB(0.0, 0.0, size.width, size.height),
           new Paint()..color = new Color.fromARGB(255, 255, 0, 0));
     }
   }
 }
 
-/// Defines properties, such as [opacity] and [transferMode] that are shared
-/// between [Node]s that render textures to screen.
+/// 定义属性，例如 [opacity] 和 [transferMode]，这些属性在将纹理渲染到屏幕的 [Node] 之间共享
 abstract class SpritePaint {
   double _opacity = 1.0;
 
-  /// The opacity of the sprite in the range 0.0 to 1.0.
-  ///
-  ///     mySprite.opacity = 0.5;
+  /// Sprite的不透明度在0.0到1.0的范围内
+  /// ```dart
+  /// mySprite.opacity = 0.5;
+  /// ```
   double get opacity => _opacity;
 
   set opacity(double opacity) {
@@ -106,16 +108,18 @@ abstract class SpritePaint {
     _opacity = opacity;
   }
 
-  /// The color to draw on top of the sprite, null if no color overlay is used.
-  ///
-  ///     // Color the sprite red
-  ///     mySprite.colorOverlay = new Color(0x77ff0000);
+  /// 要在精灵上方绘制的颜色，如果不使用颜色覆盖，则为null
+  /// ```dart
+  /// // 将精灵变红
+  /// mySprite.colorOverlay = new Color(0x77ff0000);
+  /// ```
   Color colorOverlay;
 
-  /// The transfer mode used when drawing the sprite to screen.
-  ///
-  ///     // Add the colors of the sprite with the colors of the background
-  ///     mySprite.transferMode = TransferMode.plusMode;
+  /// 将精灵绘制到屏幕时使用的混合模式
+  /// ```dart
+  /// // 将精灵的颜色与背景颜色相加
+  /// mySprite.transferMode = TransferMode.plusMode;
+  /// ```
   BlendMode transferMode;
 
   void _updatePaint(Paint paint) {
