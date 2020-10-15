@@ -70,7 +70,7 @@ class SpriteTexture {
   /// ```dart
   /// myTexture.pivot = new Point(0.5, 0.5);
   /// ```
-
+  /// ![](https://github.com/tovi-cn/askr/blob/master/lib/extra/pivot.png?raw=true)
   Offset pivot;
 
   /// 从当前纹理的一部分,创建一个新的纹理

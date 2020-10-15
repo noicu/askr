@@ -7,8 +7,7 @@ class NodeWithSize extends Node {
   /// 节点尺寸
   Size size;
 
-  /// 中心点
-  /// ![]('../extra/pivot.png')
+  /// ![](https://github.com/tovi-cn/askr/blob/master/lib/extra/pivot.png?raw=true)
   Offset pivot;
 
   /// 默认 [size] 为零，默认 [pivot] 点为原点。子类可能会更改默认值。
