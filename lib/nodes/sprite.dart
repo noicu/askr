@@ -38,7 +38,7 @@ class Sprite extends NodeWithSize with SpritePaint {
   /// var mySprite = new Sprite.fromImage(myImage);
   /// ```
   Sprite.fromImage(ui.Image image) : super(Size.zero) {
-    assert(image != null);
+    // assert(image != null);
 
     texture = new SpriteTexture(image);
     size = texture.size;
