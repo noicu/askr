@@ -118,7 +118,7 @@ abstract class SpritePaint {
   /// 将精灵绘制到屏幕时使用的混合模式
   /// ```dart
   /// // 将精灵的颜色与背景颜色相加
-  /// mySprite.transferMode = TransferMode.plusMode;
+  /// mySprite.transferMode = BlendMode.plus;
   /// ```
   BlendMode transferMode;
 
