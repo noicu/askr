@@ -1,8 +1,25 @@
+import 'package:device_info/device_info.dart';
 import 'package:examples/label.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
+  cli();
+}
+
+cli() async {
+  // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  // AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  // print('Running on ${androidInfo.model}'); // e.g. "Moto G (4)"
+
+  // IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+  // print('Running on ${iosInfo.utsname.machine}'); // e.g. "iPod7,1"
+
+  var clipboardData = await Clipboard.getData(Clipboard.kTextPlain); //获取粘贴板中的文本
+  if (clipboardData != null) {
+    print(clipboardData.text); //打印内容
+  }
 }
 
 class MyApp extends StatelessWidget {
