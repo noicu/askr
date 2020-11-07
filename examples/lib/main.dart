@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:device_info/device_info.dart';
 import 'package:examples/label.dart';
 import 'package:flutter/material.dart';
@@ -5,20 +7,28 @@ import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
-  cli();
 }
 
 cli() async {
-  // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  // AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-  // print('Running on ${androidInfo.model}'); // e.g. "Moto G (4)"
+  try {
+    var clipboardData =
+        await Clipboard.getData(Clipboard.kTextPlain); //获取粘贴板中的文本
+    if (clipboardData != null) {
+      print(clipboardData.text); //打印内容
+    }
+  } catch (e) {
+    print(e);
+  }
+}
 
-  // IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-  // print('Running on ${iosInfo.utsname.machine}'); // e.g. "iPod7,1"
-
-  var clipboardData = await Clipboard.getData(Clipboard.kTextPlain); //获取粘贴板中的文本
-  if (clipboardData != null) {
-    print(clipboardData.text); //打印内容
+void getDeviceInfo() async {
+  DeviceInfoPlugin deviceInfo = new DeviceInfoPlugin();
+  if (Platform.isIOS) {
+    IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+    print(iosDeviceInfo);
+  } else if (Platform.isAndroid) {
+    AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+    print(androidDeviceInfo.model);
   }
 }
 
@@ -47,6 +57,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    cli();
+    getDeviceInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
